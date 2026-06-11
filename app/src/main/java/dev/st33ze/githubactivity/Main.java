@@ -1,7 +1,6 @@
 package dev.st33ze.githubactivity;
 
 import java.io.IOException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Main {
   
@@ -13,14 +12,12 @@ public class Main {
 
     String username = args[0];
     GitHubClient client = new GitHubClient();
-    ObjectMapper mapper = new ObjectMapper();
-
+    GitHubService service = new GitHubService();
 
     try {
       String json = client.fetch(username);
 
-      UserActivity[] activities = 
-        mapper.readValue(json, UserActivity[].class);
+      UserActivity[] activities = service.parse(json);
 
       for (UserActivity a : activities) {
         System.out.println(a.type() + " -> " + a.repo().name());
