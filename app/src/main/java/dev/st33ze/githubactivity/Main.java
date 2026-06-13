@@ -13,15 +13,13 @@ public class Main {
     String username = args[0];
     GitHubClient client = new GitHubClient();
     GitHubService service = new GitHubService();
+    Output output = new Output();
 
     try {
       String json = client.fetch(username);
-
       UserActivity[] activities = service.parse(json);
 
-      for (UserActivity a : activities) {
-        System.out.println(a.type() + " -> " + a.repo().name());
-      }
+      System.out.print(output.format(username, activities));
     } catch (IOException e) {
       System.err.println("IO error: " + e.getMessage());
     } catch (InterruptedException e) {
