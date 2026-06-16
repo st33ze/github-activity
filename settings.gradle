@@ -11,4 +11,3 @@ plugins {
 }
 
 rootProject.name = 'github-activity'
-include('app')
