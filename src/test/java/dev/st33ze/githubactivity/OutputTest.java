@@ -88,7 +88,57 @@ public class OutputTest {
 
     String result = output.format("t3ster", activities);
 
-    assertTrue(result.contains("Opened a new issue in t3ster/IssueRepo"));
+    assertTrue(result.contains("Opened a new issue in t3ster/IssuedRepo"));
+  }
+
+  @Test
+  void formatEmptyActivitiesArray() {
+    Output output = new Output();
+
+    UserActivity[] activities = {};
+
+    String result = output.format("t3ster", activities);
+
+    assertTrue(result.contains("No supported activity found from t3ster"));
+  }
+
+  @Test
+  void formatNotTrackedActivities() {
+    Output output = new Output();
+
+    UserActivity[] activities = {
+      new UserActivity(
+        "SomeOtherEvent",
+        new Repo("t3ster/RepoName"),
+        "date"
+      )
+    };
+
+    String result = output.format("t3ster", activities);
+
+    assertTrue(result.contains("No supported activity found from t3ster"));
+  }
+
+  @Test
+  void ignoreUnsupportedEvents() {
+    Output output = new Output();
+
+    UserActivity[] activities = {
+      new UserActivity(
+        "PushEvent",
+        new Repo("t3ster/RepoName"),
+        "date"
+      ),
+      new UserActivity(
+        "UnsupportedEvent",
+        new Repo("t3ster/repoName"),
+        "date"
+      )
+    };
+
+    String result = output.format("t3ster", activities);
+
+    assertTrue(result.contains("Pushed commits to t3ster/RepoName"));
   }
 
 }
