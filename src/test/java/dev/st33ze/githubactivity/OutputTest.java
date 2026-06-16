@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class OutputTest {
   
+  private final Output output = new Output();
+
   @Test
   void formatPushEvent() {
-    Output output = new Output();
-    
     UserActivity[] activities = {
       new UserActivity(
         "PushEvent",
@@ -25,8 +25,6 @@ public class OutputTest {
 
   @Test
   void formatCreateEvent() {
-    Output output = new Output();
-
     UserActivity[] activities = {
       new UserActivity(
         "CreateEvent",
@@ -42,8 +40,6 @@ public class OutputTest {
 
   @Test
   void formatForkEvent() {
-    Output output = new Output();
-
     UserActivity[] activities = {
       new UserActivity(
         "ForkEvent",
@@ -59,8 +55,6 @@ public class OutputTest {
 
   @Test
   void formatWatchEvent() {
-    Output output = new Output();
-
     UserActivity[] activities = {
       new UserActivity(
         "WatchEvent",
@@ -76,8 +70,6 @@ public class OutputTest {
 
   @Test
   void formatIssuesEvent() {
-    Output output = new Output();
-
     UserActivity[] activities = {
       new UserActivity(
         "IssuesEvent",
@@ -93,8 +85,6 @@ public class OutputTest {
 
   @Test
   void formatEmptyActivitiesArray() {
-    Output output = new Output();
-
     UserActivity[] activities = {};
 
     String result = output.format("t3ster", activities);
@@ -104,8 +94,6 @@ public class OutputTest {
 
   @Test
   void formatNotTrackedActivities() {
-    Output output = new Output();
-
     UserActivity[] activities = {
       new UserActivity(
         "SomeOtherEvent",
@@ -121,8 +109,6 @@ public class OutputTest {
 
   @Test
   void ignoreUnsupportedEvents() {
-    Output output = new Output();
-
     UserActivity[] activities = {
       new UserActivity(
         "PushEvent",
