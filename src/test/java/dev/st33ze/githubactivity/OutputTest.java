@@ -11,11 +11,7 @@ public class OutputTest {
   @Test
   void formatPushEvent() {
     UserActivity[] activities = {
-      new UserActivity(
-        "PushEvent",
-        new Repo("t3ster/newRepo"),
-        "date"
-      )
+      activity("PushEvent", "t3ster/newRepo")
     };
 
     String result = output.format("t3ster", activities);
@@ -26,11 +22,7 @@ public class OutputTest {
   @Test
   void formatCreateEvent() {
     UserActivity[] activities = {
-      new UserActivity(
-        "CreateEvent",
-        new Repo("t3ster/newRepo"),
-        "date"
-      )
+      activity("CreateEvent", "t3ster/newRepo")
     };
 
     String result = output.format("t3ster", activities);
@@ -41,11 +33,7 @@ public class OutputTest {
   @Test
   void formatForkEvent() {
     UserActivity[] activities = {
-      new UserActivity(
-        "ForkEvent",
-        new Repo("t3ster/ForkedRepo"),
-        "date"
-      )
+      activity("ForkEvent", "t3ster/ForkedRepo")
     };
 
     String result = output.format("t3ster", activities);
@@ -56,11 +44,7 @@ public class OutputTest {
   @Test
   void formatWatchEvent() {
     UserActivity[] activities = {
-      new UserActivity(
-        "WatchEvent",
-        new Repo("t3ster/StarredRepo"),
-        "date"
-      )
+      activity("WatchEvent", "t3ster/StarredRepo")
     };
 
     String result = output.format("t3ster", activities);
@@ -71,11 +55,7 @@ public class OutputTest {
   @Test
   void formatIssuesEvent() {
     UserActivity[] activities = {
-      new UserActivity(
-        "IssuesEvent",
-        new Repo("t3ster/IssuedRepo"),
-        "date"
-      )
+      activity("IssuesEvent", "t3ster/IssuedRepo")
     };
 
     String result = output.format("t3ster", activities);
@@ -95,11 +75,7 @@ public class OutputTest {
   @Test
   void formatNotTrackedActivities() {
     UserActivity[] activities = {
-      new UserActivity(
-        "SomeOtherEvent",
-        new Repo("t3ster/RepoName"),
-        "date"
-      )
+      activity("SomeOtherEvent", "t3ster/repoName")
     };
 
     String result = output.format("t3ster", activities);
@@ -110,21 +86,21 @@ public class OutputTest {
   @Test
   void ignoreUnsupportedEvents() {
     UserActivity[] activities = {
-      new UserActivity(
-        "PushEvent",
-        new Repo("t3ster/RepoName"),
-        "date"
-      ),
-      new UserActivity(
-        "UnsupportedEvent",
-        new Repo("t3ster/repoName"),
-        "date"
-      )
+      activity("PushEvent", "t3ster/repoName"),
+      activity("UnsupportedEvent", "t3ster/repoName")
     };
 
     String result = output.format("t3ster", activities);
 
-    assertTrue(result.contains("Pushed commits to t3ster/RepoName"));
+    assertTrue(result.contains("Pushed commits to t3ster/repoName"));
+  }
+
+  private UserActivity activity(String type, String repo) {
+    return new UserActivity(
+      type,
+      new Repo(repo),
+      "date"
+    );
   }
 
 }
