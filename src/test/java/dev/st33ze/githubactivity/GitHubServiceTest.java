@@ -27,7 +27,7 @@ class GitHubServiceTest {
           "repo": {
             "name": "t3ster/RepoName"
           },
-          "createdAt": "2025-06-01T12:00:00Z"
+          "created_at": "2025-06-01T12:00:00Z"
         }
       ]
       """;
@@ -49,14 +49,14 @@ class GitHubServiceTest {
           "repo": {
             "name": "t3ster/NewRepo"
           },
-          "createdAt": "2025-06-01T12:00:00Z"
+          "created_at": "2025-06-01T12:00:00Z"
         },
         {
           "type": "ForkEvent",
           "repo": {
             "name": "t3ster/RepoName"
           },
-          "createdAt": "2025-06-01T12:00:00Z"
+          "created_at": "2025-06-01T12:00:00Z"
         }
       ]    
     """;
@@ -82,7 +82,7 @@ class GitHubServiceTest {
           "repo": {
             "name": "t3ster/RepoName"
           },
-          "createdAt": "2025-06-01T12:00:00Z",
+          "created_at": "2025-06-01T12:00:00Z",
           "extra_field": "ignored"
         }
       ]
