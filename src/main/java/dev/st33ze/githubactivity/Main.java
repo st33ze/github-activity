@@ -11,6 +11,7 @@ public class Main {
     }
 
     String username = args[0];
+
     GitHubClient client = new GitHubClient();
     GitHubService service = new GitHubService();
     Output output = new Output();
@@ -20,11 +21,18 @@ public class Main {
       UserActivity[] activities = service.parse(json);
 
       System.out.print(output.format(username, activities));
+    } catch (GitHubApiException e) {
+      System.err.println("GitHub error: " + e.getMessage());
+      System.exit(1);
+
     } catch (IOException e) {
       System.err.println("IO error: " + e.getMessage());
+      System.exit(1);
+
     } catch (InterruptedException e) {
       System.err.println(("Request interrupted"));
       Thread.currentThread().interrupt();
+      System.exit(1);
     }
 
   }

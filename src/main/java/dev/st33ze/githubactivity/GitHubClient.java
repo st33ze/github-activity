@@ -19,7 +19,7 @@ class GitHubClient {
     HttpResponse<String> response = 
       client.send(request, HttpResponse.BodyHandlers.ofString());
     
-    return response.body();
+    return handleResponse(response, username);
   }
 
   private URI createUri(String username) {
@@ -28,5 +28,19 @@ class GitHubClient {
       username +
       "/events"
     );
+  }
+
+  private String handleResponse(HttpResponse<String> response, String username) {
+    int status = response.statusCode();
+
+    if (status == 200) return response.body();
+
+    if (status == 404)
+      throw new GitHubApiException("User not found: " + username);
+
+    if (status == 403)
+      throw new GitHubApiException("Rate limit exceeded or access forbidden");
+
+    throw new GitHubApiException("GitHub API error: HTTP " + status);
   }
 }
