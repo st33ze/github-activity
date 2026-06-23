@@ -1,6 +1,8 @@
 package dev.st33ze.githubactivity;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -8,38 +10,18 @@ public class OutputTest {
   
   private final Output output = new Output();
 
-  @Test
-  void formatPushEvent() {
-    String expected = expect("t3ster", "[2026-01-01 10:00] Pushed commits to t3ster/repoName");
+  @ParameterizedTest
+  @CsvSource({
+    "PushEvent, Pushed commits to t3ster/repoName",
+    "CreateEvent, Created a new repository t3ster/repoName",
+    "ForkEvent, Forked repository t3ster/repoName",
+    "WatchEvent, Starred t3ster/repoName",
+    "IssuesEvent, Opened a new issue in t3ster/repoName"
+  })
+  void formatSupportedEvents(String eventType, String activityText) {
+    String expected = expect("t3ster", "[2026-01-01 10:00] " + activityText);
 
-    assertEquals(expected, format(activity("PushEvent")));
-  }
-
-  @Test
-  void formatCreateEvent() {
-    String expected = expect("t3ster", "[2026-01-01 10:00] Created a new repository t3ster/repoName");
-    
-    assertEquals(expected, format(activity("CreateEvent")));
-  }
-
-  @Test
-  void formatForkEvent() {
-    String expected = expect("t3ster", "[2026-01-01 10:00] Forked repository t3ster/repoName");
-
-    assertEquals(expected, format(activity("ForkEvent")));
-  }
-
-  @Test
-  void formatWatchEvent() {
-    String expected = expect("t3ster", "[2026-01-01 10:00] Starred t3ster/repoName");
-
-    assertEquals(expected, format(activity("WatchEvent")));
-  }
-
-  @Test void formatIssuesEvent() {
-    String expected = expect("t3ster", "[2026-01-01 10:00] Opened a new issue in t3ster/repoName");
-
-    assertEquals(expected, format(activity("IssuesEvent")));
+    assertEquals(expected, format(activity(eventType)));
   }
 
   @Test
