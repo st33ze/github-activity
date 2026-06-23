@@ -2,7 +2,7 @@ package dev.st33ze.githubactivity;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class OutputTest {
   
@@ -10,97 +10,105 @@ public class OutputTest {
 
   @Test
   void formatPushEvent() {
-    UserActivity[] activities = {
-      activity("PushEvent", "t3ster/newRepo")
-    };
+    String expected = expect("t3ster", "[2026-01-01 10:00] Pushed commits to t3ster/repoName");
 
-    String result = output.format("t3ster", activities);
-
-    assertTrue(result.contains("Pushed commits to t3ster/newRepo"));
+    assertEquals(expected, format(activity("PushEvent")));
   }
 
   @Test
   void formatCreateEvent() {
-    UserActivity[] activities = {
-      activity("CreateEvent", "t3ster/newRepo")
-    };
-
-    String result = output.format("t3ster", activities);
-
-    assertTrue(result.contains("Created a new repository t3ster/newRepo"));
+    String expected = expect("t3ster", "[2026-01-01 10:00] Created a new repository t3ster/repoName");
+    
+    assertEquals(expected, format(activity("CreateEvent")));
   }
 
   @Test
   void formatForkEvent() {
-    UserActivity[] activities = {
-      activity("ForkEvent", "t3ster/ForkedRepo")
-    };
+    String expected = expect("t3ster", "[2026-01-01 10:00] Forked repository t3ster/repoName");
 
-    String result = output.format("t3ster", activities);
-
-    assertTrue(result.contains("Forked repository t3ster/ForkedRepo"));
+    assertEquals(expected, format(activity("ForkEvent")));
   }
 
   @Test
   void formatWatchEvent() {
-    UserActivity[] activities = {
-      activity("WatchEvent", "t3ster/StarredRepo")
-    };
+    String expected = expect("t3ster", "[2026-01-01 10:00] Starred t3ster/repoName");
 
-    String result = output.format("t3ster", activities);
+    assertEquals(expected, format(activity("WatchEvent")));
+  }
 
-    assertTrue(result.contains("Starred t3ster/StarredRepo"));
+  @Test void formatIssuesEvent() {
+    String expected = expect("t3ster", "[2026-01-01 10:00] Opened a new issue in t3ster/repoName");
+
+    assertEquals(expected, format(activity("IssuesEvent")));
   }
 
   @Test
-  void formatIssuesEvent() {
-    UserActivity[] activities = {
-      activity("IssuesEvent", "t3ster/IssuedRepo")
-    };
+  void formatEmptyActivitesArray() {
+    String expected = "No supported activity found from t3ster";
 
-    String result = output.format("t3ster", activities);
-
-    assertTrue(result.contains("Opened a new issue in t3ster/IssuedRepo"));
-  }
-
-  @Test
-  void formatEmptyActivitiesArray() {
-    UserActivity[] activities = {};
-
-    String result = output.format("t3ster", activities);
-
-    assertTrue(result.contains("No supported activity found from t3ster"));
+    assertEquals(expected, format());
   }
 
   @Test
   void formatNotTrackedActivities() {
-    UserActivity[] activities = {
-      activity("SomeOtherEvent", "t3ster/repoName")
-    };
+    String expected = "No supported activity found from t3ster";
 
-    String result = output.format("t3ster", activities);
-
-    assertTrue(result.contains("No supported activity found from t3ster"));
+    assertEquals(expected, format(activity("SomeOtherEvent")));
   }
 
   @Test
   void ignoreUnsupportedEvents() {
-    UserActivity[] activities = {
-      activity("PushEvent", "t3ster/repoName"),
-      activity("UnsupportedEvent", "t3ster/repoName")
-    };
+    String expected = expect("t3ster", "[2026-01-01 10:00] Pushed commits to t3ster/repoName");
 
-    String result = output.format("t3ster", activities);
-
-    assertTrue(result.contains("Pushed commits to t3ster/repoName"));
+    assertEquals(
+      expected,
+      format(activity("UnsupportedEvent"), activity("PushEvent"))
+    );
   }
 
-  private UserActivity activity(String type, String repo) {
+  @Test
+  void ignoreInvalidDate() {
+    String expected = expect("t3ster", "- Opened a new issue in t3ster/repoName");
+
+    assertEquals(expected, format(activity("IssuesEvent", "t3ster/repoName", "date")));
+  }
+
+  @Test
+  void ignoreEmptyDate() {
+    String expected = expect("t3ster", "- Starred t3ster/repoName");
+
+    assertEquals(expected, format(activity("WatchEvent", "t3ster/repoName", "")));
+  }
+
+  @Test
+  void ignoreNullDate() {
+    String expected = expect("t3ster", "- Created a new repository t3ster/repoName");
+
+    assertEquals(expected, format(activity("CreateEvent", "t3ster/repoName", null)));
+  }
+
+  private String format(UserActivity ...activities) {
+    return output.format("t3ster", activities);
+  }
+
+  private String expect(String username, String line) {
+    return "Recent GitHub activity from " + username + "\n\n" + line + "\n";
+  }
+
+  private UserActivity activity(String type, String repo, String date) {
     return new UserActivity(
       type,
       new Repo(repo),
-      "date"
+      date
     );
+  }
+
+  private UserActivity activity(String type, String repo) {
+    return activity(type, repo, "2026-01-01T10:00:00Z");
+  }
+
+  private UserActivity activity(String type) {
+    return activity(type, "t3ster/repoName");
   }
 
 }
