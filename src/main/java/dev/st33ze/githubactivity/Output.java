@@ -17,7 +17,7 @@ class Output {
     }
 
     if (output.length() == 0)
-      return "No supported activity found from " + username;
+      return "No supported activity found from " + username + "\n";
 
     return "Recent GitHub activity from " + username + "\n\n" + output;
   }
