@@ -7,7 +7,8 @@ import org.junit.jupiter.params.provider.CsvSource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class OutputTest {
-  
+
+  private static final String USERNAME = "t3ster";
   private final Output output = new Output();
 
   @ParameterizedTest
@@ -19,7 +20,7 @@ public class OutputTest {
     "IssuesEvent, Opened a new issue in t3ster/repoName"
   })
   void formatSupportedEvents(String eventType, String activityText) {
-    String expected = expect("t3ster", "[2026-01-01 10:00] " + activityText);
+    String expected = expect(USERNAME, "[2026-01-01 10:00] " + activityText);
 
     assertEquals(expected, format(activity(eventType)));
   }
@@ -40,7 +41,7 @@ public class OutputTest {
 
   @Test
   void ignoreUnsupportedEvents() {
-    String expected = expect("t3ster", "[2026-01-01 10:00] Pushed commits to t3ster/repoName");
+    String expected = expect(USERNAME, "[2026-01-01 10:00] Pushed commits to t3ster/repoName");
 
     assertEquals(
       expected,
@@ -50,21 +51,21 @@ public class OutputTest {
 
   @Test
   void ignoreInvalidDate() {
-    String expected = expect("t3ster", "- Opened a new issue in t3ster/repoName");
+    String expected = expect(USERNAME, "- Opened a new issue in t3ster/repoName");
 
     assertEquals(expected, format(activity("IssuesEvent", "t3ster/repoName", "date")));
   }
 
   @Test
   void ignoreEmptyDate() {
-    String expected = expect("t3ster", "- Starred t3ster/repoName");
+    String expected = expect(USERNAME, "- Starred t3ster/repoName");
 
     assertEquals(expected, format(activity("WatchEvent", "t3ster/repoName", "")));
   }
 
   @Test
   void ignoreNullDate() {
-    String expected = expect("t3ster", "- Created a new repository t3ster/repoName");
+    String expected = expect(USERNAME, "- Created a new repository t3ster/repoName");
 
     assertEquals(expected, format(activity("CreateEvent", "t3ster/repoName", null)));
   }
