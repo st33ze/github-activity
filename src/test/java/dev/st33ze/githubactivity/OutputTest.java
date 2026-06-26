@@ -27,14 +27,14 @@ public class OutputTest {
 
   @Test
   void formatEmptyActivitesArray() {
-    String expected = "No supported activity found from t3ster";
+    String expected = "No supported activity found from t3ster\n";
 
     assertEquals(expected, format());
   }
 
   @Test
   void formatNotTrackedActivities() {
-    String expected = "No supported activity found from t3ster";
+    String expected = "No supported activity found from t3ster\n";
 
     assertEquals(expected, format(activity("SomeOtherEvent")));
   }
