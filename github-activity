@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+java -jar "/usr/local/lib/github-activity/github-activity.jar" "$@"
